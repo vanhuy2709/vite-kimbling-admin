@@ -1,0 +1,40 @@
+.card--container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 2rem;
+}
+.card {
+  flex: 1;
+  background: #dde6ed;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  transition: 0.5s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.04);
+  cursor: pointer;
+}
+.card--cover {
+  background-color: #fff;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+  color: #969393;
+}
+.card--title {
+  background: #ffffffc0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #526d82;
+  border-radius: 10px;
+}

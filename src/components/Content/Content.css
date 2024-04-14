@@ -1,7 +1,4 @@
-.content {
-  width: 75%;
-}
-.content--header {
+/* .content--header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,4 +46,4 @@
 }
 .icon:hover {
   transform: scale(1.3);
-}
+} */

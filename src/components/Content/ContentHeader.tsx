@@ -1,4 +1,4 @@
-import { BiSearch, BiNotification } from "react-icons/bi"
+// import { BiSearch, BiNotification } from "react-icons/bi"
 
 const ContentHeader = () => {
   return (
@@ -7,14 +7,14 @@ const ContentHeader = () => {
 
       <div className="header--activity">
 
-        <div className="search-box">
+        {/* <div className="search-box">
           <input type="text" placeholder="Search anything here..." />
           <BiSearch className="icon" />
         </div>
 
         <div className="notify">
           <BiNotification className="icon" />
-        </div>
+        </div> */}
       </div>
 
     </div>

@@ -1,6 +1,5 @@
-import Content from "./components/Content/Content"
-import Profile from "./components/Profile/Profile"
 import Sidebar from "./components/Sidebar/Sidebar"
+import { Outlet } from "react-router-dom";
 import './App.css';
 
 const App = () => {
@@ -10,11 +9,10 @@ const App = () => {
       <Sidebar />
 
       <div className="dashboard--content">
-        <Content />
-        <Profile />
+        <Outlet />
       </div>
     </div>
   )
 }
 
-export default App
+export default App;

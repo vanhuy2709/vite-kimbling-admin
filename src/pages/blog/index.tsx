@@ -53,14 +53,54 @@ const columns: TableProps<IBlog>['columns'] = [
 
 const Blog = () => {
   const [listBlog, setListBlog] = useState<IBlog[]>()!;
+  const [meta, setMeta] = useState({
+    current: 1,
+    pageSize: 10,
+    pages: 0,
+    total: 0
+  });
 
   const getDataBlog = async () => {
     const res = await sendRequest<IBackendRes<IBlog>>({
       method: 'get',
-      url: 'https://kimtuyen.blog/api/v1/blog'
+      url: `https://kimtuyen.blog/api/v1/blog`,
+      queryParams: {
+        current: meta.current,
+        pageSize: meta.pageSize,
+      }
     })
 
-    setListBlog(res.data?.result);
+    if (res.data) {
+      setListBlog(res.data?.result);
+      setMeta({
+        current: res.data?.meta.current!,
+        pageSize: res.data?.meta.pageSize!,
+        pages: res.data?.meta.pages,
+        total: res.data?.meta.total,
+      })
+    }
+  }
+
+  // Handle Change Pagination
+  const handleOnChange = async (page: number, pageSize: number) => {
+    const res = await sendRequest<IBackendRes<IBlog>>({
+      method: 'get',
+      url: `https://kimtuyen.blog/api/v1/blog`,
+      queryParams: {
+        current: page,
+        pageSize: pageSize,
+      }
+    })
+
+    if (res.data) {
+      setListBlog(res.data?.result);
+      setMeta({
+        current: res.data?.meta.current!,
+        pageSize: res.data?.meta.pageSize!,
+        pages: res.data?.meta.pages,
+        total: res.data?.meta.total,
+      })
+    }
   }
 
   // Call API get Data
@@ -76,9 +116,16 @@ const Blog = () => {
         columns={columns}
         dataSource={listBlog}
         rowKey={(record) => record._id}
+        pagination={{
+          current: meta.current,
+          pageSize: meta.pageSize,
+          total: meta.total,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+          onChange: (page: number, pageSize: number) => handleOnChange(page, pageSize)
+        }}
       />
     </>
   )
 }
 
-export default Blog
+export default Blog;

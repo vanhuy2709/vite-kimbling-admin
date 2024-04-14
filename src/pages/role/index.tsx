@@ -44,25 +44,55 @@ const columns: TableProps<IRole>['columns'] = [
 ];
 
 const Role = () => {
-
   const [listRole, setListRole] = useState<IRole[]>()!;
+  const [meta, setMeta] = useState({
+    current: 1,
+    pageSize: 10,
+    pages: 0,
+    total: 0,
+  })
 
   const getDataRole = async () => {
     const res = await sendRequest<IBackendRes<IRole>>({
       method: 'get',
-      url: 'https://kimtuyen.blog/api/v1/roles'
+      url: 'https://kimtuyen.blog/api/v1/roles',
+      queryParams: {
+        current: meta.current,
+        pageSize: meta.pageSize,
+      }
     })
 
-    setListRole(res.data?.result);
+    if (res.data) {
+      setListRole(res.data?.result);
+    }
+  }
+
+  // Handle Change Pagination
+  const handleOnChange = async (page: number, pageSize: number) => {
+    const res = await sendRequest<IBackendRes<IRole>>({
+      method: 'get',
+      url: `https://kimtuyen.blog/api/v1/roles`,
+      queryParams: {
+        current: page,
+        pageSize: pageSize,
+      }
+    })
+
+    if (res.data) {
+      setListRole(res.data?.result);
+      setMeta({
+        current: res.data?.meta.current!,
+        pageSize: res.data?.meta.pageSize!,
+        pages: res.data?.meta.pages,
+        total: res.data?.meta.total,
+      })
+    }
   }
 
   // Call API get Data
   useEffect(() => {
     getDataRole()
   }, [])
-
-  console.log(listRole);
-
 
   return (
     <>
@@ -71,6 +101,13 @@ const Role = () => {
         columns={columns}
         dataSource={listRole}
         rowKey={(record) => record._id}
+        pagination={{
+          current: meta.current,
+          pageSize: meta.pageSize,
+          total: meta.total,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+          onChange: (page: number, pageSize: number) => handleOnChange(page, pageSize)
+        }}
       />
     </>
   )

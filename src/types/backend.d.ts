@@ -3,13 +3,6 @@ export { };
 
 declare global {
 
-  interface IRole {
-    _id: string,
-    nameRole: string,
-    description: string,
-    thumb: string
-  }
-
   // interface IBlogByRole {
   //   _id: string,
   //   title: string,
@@ -22,6 +15,13 @@ declare global {
   //   createdAt: string,
   //   updatedAt: string,
   // }
+  interface IAuth {
+    access_token: string,
+    user: {
+      _id: string,
+      username: string
+    }
+  }
 
   interface IMeta {
     current: number | null,
@@ -44,6 +44,13 @@ declare global {
     updatedAt: string,
   }
 
+  interface IRole {
+    _id: string,
+    nameRole: string,
+    description: string,
+    thumb: string
+  }
+
   interface IRequest {
     url: string;
     method: string;
@@ -52,6 +59,13 @@ declare global {
     useCredentials?: boolean;
     headers?: any;
     nextOption?: any;
+  }
+
+  interface IBackendAuth<T> {
+    error?: string | string[];
+    message: string;
+    statusCode: number | string;
+    data?: T;
   }
 
   interface IBackendRes<T> {

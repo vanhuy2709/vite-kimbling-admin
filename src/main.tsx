@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import Blog from './pages/blog';
 import Role from './pages/role';
+import LoginPage from './pages/login';
 
 // Router Page
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       },
     ]
   },
+  {
+    path: "/login",
+    element: <LoginPage />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

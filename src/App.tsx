@@ -1,8 +1,18 @@
 import Sidebar from "./components/Sidebar/Sidebar"
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import './App.css';
+import { useEffect } from "react";
 
 const App = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storageUser = sessionStorage.getItem('user');
+
+    if (!storageUser) {
+      navigate('/login');
+    }
+  }, [])
 
   return (
     <div className="dashboard">

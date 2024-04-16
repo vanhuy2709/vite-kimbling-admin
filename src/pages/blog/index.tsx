@@ -1,7 +1,7 @@
 import Header from "../../components/Header/Header";
 import { useEffect, useState } from "react";
 import { sendRequest } from "../../utils/api";
-import { Space, Table, Tag, Button } from 'antd';
+import { Space, Table, Tag, Button, Popconfirm, message } from 'antd';
 import type { TableProps } from 'antd';
 import { BiPlus } from 'react-icons/bi';
 
@@ -25,6 +25,24 @@ const Blog = () => {
     pages: 0,
     total: 0
   });
+
+  // Click Delete Blog
+  const confirm = async (record: IBlog) => {
+    const res = await sendRequest<IBackendRes<IBlog>>({
+      method: 'delete',
+      url: `https://kimtuyen.blog/api/v1/blog/${record._id}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+    })
+
+    if (res.data) {
+      message.success(`Delete blog ${record.title} success`);
+      getDataBlog();
+    } else {
+      message.error(`Delete blog ${record.title} failed`)
+    }
+  };
 
   // Column Table
   const columns: TableProps<IBlog>['columns'] = [
@@ -66,12 +84,17 @@ const Blog = () => {
           >
             Detail
           </Button>
-          <Button
-            danger
-            onClick={() => console.log('Delete: ', record._id)}
+
+          <Popconfirm
+            title="Delete a blog"
+            description={`Are you sure to delete blog: ${record.title}?`}
+            onConfirm={() => confirm(record)}
+            okText="Yes"
+            cancelText="No"
           >
-            Delete
-          </Button>
+            <Button danger>Delete</Button>
+          </Popconfirm>
+
         </Space>
       ),
     },

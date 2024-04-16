@@ -11,6 +11,9 @@ import ModalCreateBlog from "../../components/Modal/create.blog";
 
 const Blog = () => {
 
+  // Get Token
+  const accessToken = sessionStorage.getItem('user')!;
+
   // Initial State
   const [listBlog, setListBlog] = useState<IBlog[]>()!;
   const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false);
@@ -164,6 +167,7 @@ const Blog = () => {
         isOpenModalCreate={isOpenModalCreate}
         setIsOpenModalCreate={setIsOpenModalCreate}
         getDataBlog={getDataBlog}
+        accessToken={accessToken}
       />
 
     </>

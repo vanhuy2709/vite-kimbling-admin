@@ -5,6 +5,7 @@ import './index.css'
 
 // Router
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+// Progress Bar
 
 // Import Page
 import Dashboard from './pages/dashboard';

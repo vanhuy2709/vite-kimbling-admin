@@ -41,7 +41,7 @@ const ModalCreateBlog = (props: IProps) => {
   };
 
 
-  // Submit Update Blog
+  // Submit Create Blog
   const onFinish = async (values: any) => {
     const { title, description, idRole, color } = values;
     const data = {
@@ -55,9 +55,6 @@ const ModalCreateBlog = (props: IProps) => {
     setIsOpenModalCreate(false);
     // Reset Form Antd
     form.resetFields();
-
-    // Check result
-    // console.log('Success:', data);
 
     // Call API post data
     const res = await sendRequest<IBackendRes<IBlog>>({
@@ -73,7 +70,7 @@ const ModalCreateBlog = (props: IProps) => {
       message.success('Create Blog success');
       getDataBlog();
     } else {
-      message.error('Create Blog Error')
+      message.error('Create Blog Failed')
     }
   };
 
@@ -90,7 +87,7 @@ const ModalCreateBlog = (props: IProps) => {
       }}
     >
 
-      {/* Form Create */}
+      {/* Form Create Blog */}
       <Form
         name="Create a blog"
         onFinish={onFinish}

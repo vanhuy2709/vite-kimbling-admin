@@ -16,6 +16,7 @@ const ModalUpdateBlog = (props: IProps) => {
   const [listRole, setListRole] = useState<IRole[]>()!;
   const [form] = Form.useForm();
 
+  // Fill data to modal update
   useEffect(() => {
     if (dataUpdate) {
       form.setFieldsValue({

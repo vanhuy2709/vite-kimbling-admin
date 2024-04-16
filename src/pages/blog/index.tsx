@@ -3,16 +3,19 @@ import { useEffect, useState } from "react";
 import { sendRequest } from "../../utils/api";
 import { Space, Table, Tag, Button } from 'antd';
 import type { TableProps } from 'antd';
+import { BiPlus } from 'react-icons/bi';
 
 // Import Modal
 import ModalUpdateBlog from "../../components/Modal/update.blog";
+import ModalCreateBlog from "../../components/Modal/create.blog";
 
 const Blog = () => {
 
+  // Initial State
   const [listBlog, setListBlog] = useState<IBlog[]>()!;
   const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false);
+  const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState<null | IBlog>(null);
-
   const [meta, setMeta] = useState({
     current: 1,
     pageSize: 10,
@@ -54,8 +57,8 @@ const Blog = () => {
           <Button
             type="primary"
             onClick={() => {
-              setDataUpdate(record)
-              setIsOpenModalUpdate(true)
+              setDataUpdate(record);
+              setIsOpenModalUpdate(true);
             }}
           >
             Detail
@@ -116,13 +119,27 @@ const Blog = () => {
 
   // Call API get Data
   useEffect(() => {
-    getDataBlog()
+    getDataBlog();
   }, [])
 
   return (
 
     <>
-      <Header title="Blog" />
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '1rem'
+      }}>
+        <Header title="Blog" />
+        <Button
+          style={{ display: 'flex', alignItems: 'center' }}
+          icon={<BiPlus />}
+          onClick={() => setIsOpenModalCreate(true)}
+        >
+          Add New Blog
+        </Button>
+      </div>
       <Table
         columns={columns}
         dataSource={listBlog}
@@ -141,6 +158,12 @@ const Blog = () => {
         setIsOpenModalUpdate={setIsOpenModalUpdate}
         getDataBlog={getDataBlog}
         dataUpdate={dataUpdate}
+      />
+
+      <ModalCreateBlog
+        isOpenModalCreate={isOpenModalCreate}
+        setIsOpenModalCreate={setIsOpenModalCreate}
+        getDataBlog={getDataBlog}
       />
 
     </>

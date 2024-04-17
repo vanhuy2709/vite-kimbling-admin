@@ -11,6 +11,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import Blog from './pages/blog';
 import Role from './pages/role';
+import Client from './pages/client';
 import LoginPage from './pages/login';
 
 // Router Page
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'role',
         element: <Role />
+      },
+      {
+        path: 'client',
+        element: <Client />
       },
     ]
   },

@@ -1,7 +1,9 @@
-import { Modal, Input, Form, Select, ColorPicker, Upload, message } from "antd";
-import { BiPlus } from 'react-icons/bi';
-import { sendRequest } from "../../utils/api";
 import { useEffect, useState } from "react";
+import { Modal, Input, Form, Select, ColorPicker, Upload, Button, message } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { BiPlus } from 'react-icons/bi';
+import { sendRequest, sendRequestFormData } from "../../utils/api";
+import { beforeUpload, customRequest } from "../../utils/upload";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -33,37 +35,64 @@ const ModalCreateBlog = (props: IProps) => {
     getDataRole();
   }, []);
 
-  const normFile = (e: any) => {
+  const normMultipleFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
 
+  const normSingleFile = (e: any) => {
+    return e?.file;
+  };
+
 
   // Submit Create Blog
   const onFinish = async (values: any) => {
-    const { title, description, idRole, color } = values;
+    const { title, description, idRole, color, thumb, photo, video } = values;
     const data = {
       title,
       description,
       idRole,
       color: color.toHexString(),
-      // thumb,
+      thumb: thumb.originFileObj,
+      photo: photo.map((item: any) => item.originFileObj),
+      video: video.map((item: any) => item.urlVideo)
     }
     // Close Modal
     setIsOpenModalCreate(false);
     // Reset Form Antd
     form.resetFields();
 
+    // Check result
+    // console.log(data);
+
     // Call API post data
-    const res = await sendRequest<IBackendRes<IBlog>>({
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${accessToken}`);
+
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('idRole', data.idRole);
+    formData.append('color', data.color);
+    formData.append('thumb', data.thumb);
+    // formData.append('photos', data.photo);
+    // formData.append('video', data.video);
+    data.photo.forEach((image: any) => {
+      formData.append('photos', image)
+    })
+    data.video.forEach((video: any) => {
+      formData.append('video', video)
+    })
+
+    const res = await sendRequestFormData<IBackendRes<IBlog>>({
       method: 'post',
-      url: 'https://kimtuyen.blog/api/v1/blog',
+      url: 'http://localhost:8000/api/v1/blog',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      body: data
+      body: formData
     })
 
     if (res.data) {
@@ -143,12 +172,18 @@ const ModalCreateBlog = (props: IProps) => {
         <Form.Item
           label="Thumb"
           name="thumb"
-          // rules={[{ required: true, message: 'Please input your thumb!' }]}
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+          rules={[{ required: true, message: 'Please input your thumb!' }]}
+          valuePropName="file"
+          getValueFromEvent={normSingleFile}
         >
           {/* <Input /> */}
-          <Upload listType="picture-card" multiple={false}>
+          <Upload
+            listType="picture-card"
+            multiple={false}
+            maxCount={1}
+            customRequest={customRequest}
+            beforeUpload={beforeUpload}
+          >
             <button style={{ border: 0, background: 'none' }} type="button">
               <BiPlus />
               <div style={{ marginTop: 8 }}>Upload</div>
@@ -156,6 +191,62 @@ const ModalCreateBlog = (props: IProps) => {
           </Upload>
         </Form.Item>
 
+        {/* Photo (Array) */}
+        <Form.Item
+          label="Photo"
+          name="photo"
+          rules={[{ required: true, message: 'Please input at least 1 photo!' }]}
+          valuePropName="fileList"
+          getValueFromEvent={normMultipleFile}
+        >
+          {/* <Input /> */}
+          <Upload
+            listType="picture-card"
+            multiple={true}
+            maxCount={20}
+            customRequest={customRequest}
+            beforeUpload={beforeUpload}
+          >
+            <button style={{ border: 0, background: 'none' }} type="button">
+              <BiPlus />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </button>
+          </Upload>
+        </Form.Item>
+
+        {/* Video (Array) */}
+        <Form.Item
+          label='Video'
+          name='video'
+        >
+          <Form.List name="video">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <div
+                    key={key}
+                    style={{ display: 'flex', alignItems: 'baseline', gap: '1.5rem' }}
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'urlVideo']}
+                      rules={[{ required: true, message: 'Missing url video' }]}
+                      style={{ flex: 1 }}
+                    >
+                      <Input placeholder="Url Video" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </div>
+                ))}
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Add field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
       </Form>
 
     </Modal>

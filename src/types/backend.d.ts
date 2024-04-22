@@ -3,18 +3,6 @@ export { };
 
 declare global {
 
-  // interface IBlogByRole {
-  //   _id: string,
-  //   title: string,
-  //   description: string,
-  //   idRole: string,
-  //   color: string,
-  //   video: string[],
-  //   photo: string[],
-  //   thumb: string,
-  //   createdAt: string,
-  //   updatedAt: string,
-  // }
   interface IAuth {
     access_token: string,
     user: {

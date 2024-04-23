@@ -1,7 +1,7 @@
 import { Modal, Form, Input, Upload, Image, message } from "antd";
 import { useEffect } from "react";
-import { customRequest, beforeUpload } from "../../utils/upload";
 import { BiPlus } from "react-icons/bi";
+import { customRequest, beforeUpload } from "../../utils/upload";
 import { sendRequestFormData } from "../../utils/api";
 
 interface IProps {
@@ -17,6 +17,7 @@ const ModalUpdateBrand = (props: IProps) => {
   const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate, accessToken, getDataBrand } = props;
   const [form] = Form.useForm();
 
+  // Fill data to modal Update
   useEffect(() => {
     if (dataUpdate) {
       form.setFieldsValue({
@@ -38,8 +39,6 @@ const ModalUpdateBrand = (props: IProps) => {
       title,
       urlImage: urlImage === dataUpdate?.urlImage ? urlImage : urlImage.originFileObj
     }
-
-    console.log(data);
 
     // Create Form Data
     const formData = new FormData();
@@ -76,7 +75,6 @@ const ModalUpdateBrand = (props: IProps) => {
       onCancel={() => setIsOpenModalUpdate(false)}
     >
       {/* Form Update Brand */}
-      {/* Form Update Role */}
       <Form
         name="Update a role"
         onFinish={onFinish}

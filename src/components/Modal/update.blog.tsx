@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Modal, Form, Input, Select, ColorPicker, Image, Upload, Carousel, Button, message } from "antd";
-import { customRequest, beforeUpload } from "../../utils/upload";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { sendRequest, sendRequestFormData } from "../../utils/api";
 import { BiPlus } from "react-icons/bi";
+import { customRequest, beforeUpload } from "../../utils/upload";
+import { sendRequest, sendRequestFormData } from "../../utils/api";
+
 const { Option } = Select;
 
 interface IProps {
@@ -74,7 +75,6 @@ const ModalUpdateBlog = (props: IProps) => {
       video
     }
 
-    console.log(data);
     // Create Form Data
     const formData = new FormData();
     formData.append('title', data.title);
@@ -106,9 +106,6 @@ const ModalUpdateBlog = (props: IProps) => {
     } else {
       message.error('Update Blog Failed')
     }
-
-    // setIsOpenModalUpdate(false);
-    // console.log('Success:', values);
   };
 
   return (

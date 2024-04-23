@@ -27,9 +27,6 @@ const ModalCreateBrand = (props: IProps) => {
       urlImage: urlImage.originFileObj
     }
 
-    // Check result
-    console.log('Success: ', data);
-
     // Create Form Data
     const formData = new FormData();
     formData.append('title', data.title);

@@ -2,6 +2,7 @@ import { Modal, Form, Input, Upload, message } from "antd";
 import { BiPlus } from "react-icons/bi";
 import { sendRequestFormData } from "../../utils/api";
 import { customRequest, beforeUpload } from "../../utils/upload";
+
 const { TextArea } = Input;
 
 // Initial interface props
@@ -31,8 +32,6 @@ const ModalCreateRole = (props: IProps) => {
       description,
       thumb: thumb.originFileObj
     };
-
-    console.log(data);
 
     // Create FormData
     const formData = new FormData();

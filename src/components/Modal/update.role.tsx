@@ -17,6 +17,7 @@ const ModalUpdateRole = (props: IProps) => {
   const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate, accessToken, getDataRole } = props;
   const [form] = Form.useForm();
 
+  // Fill data to modal Update
   useEffect(() => {
     if (dataUpdate) {
       form.setFieldsValue({
@@ -41,16 +42,13 @@ const ModalUpdateRole = (props: IProps) => {
       thumb: thumb === dataUpdate?.thumb ? thumb : thumb.originFileObj,
     }
 
-    // Check result
-    // console.log('Success: ', data);
-
     // Create Form Data
     const formData = new FormData();
     formData.append('nameRole', data.nameRole);
     formData.append('description', data.description);
     formData.append('thumb', data.thumb);
 
-    // Call API put data
+    // Call API update data
     const res = await sendRequestFormData<IBackendRes<IRole>>({
       method: 'PATCH',
       url: `http://localhost:8000/api/v1/roles/${dataUpdate?._id}`,

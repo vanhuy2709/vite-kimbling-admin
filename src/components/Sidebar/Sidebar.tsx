@@ -1,10 +1,4 @@
-import {
-  BiBookAlt,
-  BiHome,
-  BiMessage,
-  BiSolidReport,
-  BiTask,
-} from 'react-icons/bi';
+import { BiBookAlt, BiHome, BiMessage, BiSolidReport, BiTask } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import './Sidebar.css';
 

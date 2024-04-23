@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <Role />
       },
       {
-        path: 'client',
+        path: 'brand',
         element: <Brand />
       },
     ]

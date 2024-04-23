@@ -30,9 +30,9 @@ const Sidebar = () => {
           <BiSolidReport className='icon' />
           Role
         </Link>
-        <Link to="/admin/client" className="item">
+        <Link to="/admin/brand" className="item">
           <BiMessage className='icon' />
-          Client
+          Brand
         </Link>
       </div>
     </div>

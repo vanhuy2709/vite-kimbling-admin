@@ -91,7 +91,7 @@ const ModalUpdateBlog = (props: IProps) => {
 
     // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
-      method: 'patch',
+      method: 'PATCH',
       url: `http://localhost:8000/api/v1/blog/${dataUpdate?._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -101,6 +101,7 @@ const ModalUpdateBlog = (props: IProps) => {
 
     if (res.data) {
       message.success('Update Blog success');
+      setIsOpenModalUpdate(false);
       getDataBlog();
     } else {
       message.error('Update Blog Failed')

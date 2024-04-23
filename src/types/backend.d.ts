@@ -18,6 +18,12 @@ declare global {
     total: number
   }
 
+  interface IBrand {
+    _id: string,
+    title: string,
+    urlImage: string,
+  }
+
   interface IBlog {
     _id: string,
     title: string,

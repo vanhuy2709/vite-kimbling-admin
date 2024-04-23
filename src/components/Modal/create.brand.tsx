@@ -1,21 +1,17 @@
 import { Modal, Form, Input, Upload, message } from "antd";
 import { BiPlus } from "react-icons/bi";
-import { sendRequestFormData } from "../../utils/api";
 import { customRequest, beforeUpload } from "../../utils/upload";
-const { TextArea } = Input;
+import { sendRequestFormData } from "../../utils/api";
 
-// Initial interface props
 interface IProps {
   isOpenModalCreate: boolean;
   setIsOpenModalCreate: (value: boolean) => void;
   accessToken: string;
-  getDataRole: any;
+  getDataBrand: any;
 }
+const ModalCreateBrand = (props: IProps) => {
 
-const ModalCreateRole = (props: IProps) => {
-
-  // Destructuring props
-  const { isOpenModalCreate, setIsOpenModalCreate, accessToken, getDataRole } = props;
+  const { isOpenModalCreate, setIsOpenModalCreate, accessToken, getDataBrand } = props;
   const [form] = Form.useForm();
 
   // Upload thumb single file
@@ -25,25 +21,24 @@ const ModalCreateRole = (props: IProps) => {
 
   // Submit Form
   const onFinish = async (values: any) => {
-    const { nameRole, description, thumb } = values;
+    const { title, urlImage } = values;
     const data = {
-      nameRole,
-      description,
-      thumb: thumb.originFileObj
-    };
+      title,
+      urlImage: urlImage.originFileObj
+    }
 
-    console.log(data);
+    // Check result
+    console.log('Success: ', data);
 
-    // Create FormData
+    // Create Form Data
     const formData = new FormData();
-    formData.append('nameRole', data.nameRole);
-    formData.append('description', data.description);
-    formData.append('thumb', data.thumb);
+    formData.append('title', data.title);
+    formData.append('urlImage', data.urlImage);
 
-    // Call API create a role
-    const res = await sendRequestFormData<IBackendRes<IRole>>({
-      method: 'post',
-      url: 'http://localhost:8000/api/v1/roles',
+    // Call API post brand
+    const res = await sendRequestFormData<IBackendRes<IBrand>>({
+      method: 'POST',
+      url: 'http://localhost:8000/api/v1/brand',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -51,21 +46,18 @@ const ModalCreateRole = (props: IProps) => {
     })
 
     if (res.data) {
-      message.success('Create Role success')
-      // Fetching list role
-      getDataRole();
-      // Close Modal
+      message.success('Create Brand success');
+      getDataBrand();
       setIsOpenModalCreate(false);
-      // Reset Fields
       form.resetFields();
     } else {
-      message.error('Create Role Failed')
+      message.error('Create Brand failed')
     }
-  };
+  }
 
   return (
     <Modal
-      title="Create role"
+      title="Create Brand"
       centered
       maskClosable={false}
       open={isOpenModalCreate}
@@ -75,8 +67,7 @@ const ModalCreateRole = (props: IProps) => {
         form.resetFields();
       }}
     >
-
-      {/* Form Create Role */}
+      {/* Form Create Brand */}
       <Form
         name="Create a role"
         layout="vertical"
@@ -84,25 +75,17 @@ const ModalCreateRole = (props: IProps) => {
         onFinish={onFinish}
       >
         <Form.Item
-          label="Name Role"
-          name="nameRole"
-          rules={[{ required: true, message: 'Please input your name role!' }]}
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please input your title!' }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true, message: 'Please input your description!' }]}
-        >
-          <TextArea />
-        </Form.Item>
-
-        <Form.Item
-          label="Thumb"
-          name="thumb"
-          rules={[{ required: true, message: 'Please input your thumb!' }]}
+          label="Image"
+          name="urlImage"
+          rules={[{ required: true, message: 'Please input your image!' }]}
           valuePropName="file"
           getValueFromEvent={normSingleFile}
         >
@@ -125,4 +108,4 @@ const ModalCreateRole = (props: IProps) => {
   )
 }
 
-export default ModalCreateRole
+export default ModalCreateBrand

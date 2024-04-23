@@ -37,6 +37,7 @@ const LoginPage = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
+        layout='vertical'
       >
         <h1 className='login--title'>KimBling Admin Dashboard</h1>
         <Form.Item<FieldType>

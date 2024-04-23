@@ -3,26 +3,25 @@ import { useEffect } from "react";
 import { customRequest, beforeUpload } from "../../utils/upload";
 import { BiPlus } from "react-icons/bi";
 import { sendRequestFormData } from "../../utils/api";
-const { TextArea } = Input;
 
 interface IProps {
   isOpenModalUpdate: boolean;
   setIsOpenModalUpdate: (value: boolean) => void;
-  dataUpdate: IRole | null;
-  getDataRole: any;
+  dataUpdate: null | IBrand;
   accessToken: string;
+  getDataBrand: any;
 }
-const ModalUpdateRole = (props: IProps) => {
 
-  const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate, accessToken, getDataRole } = props;
+const ModalUpdateBrand = (props: IProps) => {
+
+  const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate, accessToken, getDataBrand } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
     if (dataUpdate) {
       form.setFieldsValue({
-        nameRole: dataUpdate.nameRole,
-        description: dataUpdate.description,
-        thumb: dataUpdate.thumb
+        title: dataUpdate.title,
+        urlImage: dataUpdate.urlImage
       })
     }
   }, [dataUpdate])
@@ -32,28 +31,25 @@ const ModalUpdateRole = (props: IProps) => {
     return e?.file;
   };
 
-  // Submit Update Blog
+  // Submit Form
   const onFinish = async (values: any) => {
-    const { nameRole, description, thumb } = values;
+    const { title, urlImage } = values;
     const data = {
-      nameRole,
-      description,
-      thumb: thumb === dataUpdate?.thumb ? thumb : thumb.originFileObj,
+      title,
+      urlImage: urlImage === dataUpdate?.urlImage ? urlImage : urlImage.originFileObj
     }
 
-    // Check result
-    // console.log('Success: ', data);
+    console.log(data);
 
     // Create Form Data
     const formData = new FormData();
-    formData.append('nameRole', data.nameRole);
-    formData.append('description', data.description);
-    formData.append('thumb', data.thumb);
+    formData.append('title', data.title);
+    formData.append('urlImage', data.urlImage);
 
-    // Call API put data
-    const res = await sendRequestFormData<IBackendRes<IRole>>({
+    // Call API update data
+    const res = await sendRequestFormData<IBackendRes<IBrand>>({
       method: 'PATCH',
-      url: `http://localhost:8000/api/v1/roles/${dataUpdate?._id}`,
+      url: `http://localhost:8000/api/v1/brand/${dataUpdate?._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -61,27 +57,25 @@ const ModalUpdateRole = (props: IProps) => {
     })
 
     if (res.data) {
-      message.success('Update Role success');
-      getDataRole();
+      message.success('Update Brand success');
+      getDataBrand();
       setIsOpenModalUpdate(false);
       form.resetFields();
     } else {
-      message.error('Update Role Failed')
+      message.error('Update Brand Failed')
     }
-  };
+  }
 
   return (
     <Modal
-      title="Update Role"
-      centered
+      title="Update Brand"
       maskClosable={false}
+      centered
       open={isOpenModalUpdate}
       onOk={() => form.submit()}
-      onCancel={() => {
-        setIsOpenModalUpdate(false)
-      }}
-      width={'60vw'}
+      onCancel={() => setIsOpenModalUpdate(false)}
     >
+      {/* Form Update Brand */}
       {/* Form Update Role */}
       <Form
         name="Update a role"
@@ -90,30 +84,21 @@ const ModalUpdateRole = (props: IProps) => {
         form={form}
       >
 
-        {/* Name Role */}
+        {/* Title */}
         <Form.Item
-          label="Name Role"
-          name="nameRole"
-          rules={[{ required: true, message: 'Please input your nameRole!' }]}
+          label="Title"
+          name="title"
+          rules={[{ required: true, message: 'Please input your title!' }]}
         >
           <Input />
         </Form.Item>
 
-        {/* Description */}
-        <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true, message: 'Please input your description!' }]}
-        >
-          <TextArea style={{ height: '120px' }} />
-        </Form.Item>
-
-        {/* Thumb */}
+        {/* Url Image */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Form.Item
-            label="Thumb"
-            name="thumb"
-            rules={[{ required: true, message: 'Please input your thumb!' }]}
+            label="Image"
+            name="urlImage"
+            rules={[{ required: true, message: 'Please input your image!' }]}
             valuePropName="file"
             getValueFromEvent={normSingleFile}
           >
@@ -132,9 +117,10 @@ const ModalUpdateRole = (props: IProps) => {
             </Upload>
           </Form.Item>
           <Image
-            src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
+            src={`http://localhost:8000/images/${dataUpdate?.urlImage}`}
             width={100}
             height={100}
+            style={{ objectFit: 'contain' }}
           />
         </div>
       </Form>
@@ -142,4 +128,4 @@ const ModalUpdateRole = (props: IProps) => {
   )
 }
 
-export default ModalUpdateRole
+export default ModalUpdateBrand

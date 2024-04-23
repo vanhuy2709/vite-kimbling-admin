@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import { Modal, Form, Input, Select } from "antd";
-import { sendRequest } from "../../utils/api";
+import { Modal, Form, Input, Select, ColorPicker, Image, Upload, Carousel, Button, message } from "antd";
+import { customRequest, beforeUpload } from "../../utils/upload";
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { sendRequest, sendRequestFormData } from "../../utils/api";
+import { BiPlus } from "react-icons/bi";
 const { Option } = Select;
 
 interface IProps {
   isOpenModalUpdate: boolean;
   getDataBlog: any;
   setIsOpenModalUpdate: (value: boolean) => void;
-  dataUpdate: null | IBlog
+  dataUpdate: null | IBlog;
+  accessToken: string;
 }
 
 const ModalUpdateBlog = (props: IProps) => {
 
-  const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate } = props;
+  const { isOpenModalUpdate, setIsOpenModalUpdate, dataUpdate, getDataBlog, accessToken } = props;
   const [listRole, setListRole] = useState<IRole[]>()!;
   const [form] = Form.useForm();
 
@@ -21,10 +25,11 @@ const ModalUpdateBlog = (props: IProps) => {
     if (dataUpdate) {
       form.setFieldsValue({
         title: dataUpdate.title,
-        descriptions: dataUpdate.description,
+        description: dataUpdate.description,
         idRole: dataUpdate.idRole,
         color: dataUpdate.color,
         thumb: dataUpdate.thumb,
+        video: dataUpdate.video,
       });
     }
   }, [dataUpdate])
@@ -44,32 +49,90 @@ const ModalUpdateBlog = (props: IProps) => {
     getDataRole();
   }, [])
 
+  // Upload multiple file
+  const normMultipleFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+  // Upload single file
+  const normSingleFile = (e: any) => {
+    return e?.file;
+  };
+
   // Submit Update Blog
-  const onFinish = (values: any) => {
-    setIsOpenModalUpdate(false);
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
+    const { title, description, idRole, color, thumb, photo, video } = values;
+    const data = {
+      title,
+      description,
+      idRole,
+      color: color === dataUpdate?.color ? color : color.toHexString(),
+      thumb: thumb === dataUpdate?.thumb ? thumb : thumb.originFileObj,
+      photo: photo ? photo.map((item: any) => item.originFileObj) : dataUpdate?.photo,
+      video
+    }
+
+    console.log(data);
+    // Create Form Data
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('idRole', data.idRole);
+    formData.append('color', data.color);
+    formData.append('thumb', data.thumb);
+    data.photo.forEach((image: any) => {
+      formData.append('photos', image)
+    })
+    data.video.forEach((video: any) => {
+      formData.append('video', video)
+    })
+
+    // Call API post data
+    const res = await sendRequestFormData<IBackendRes<IBlog>>({
+      method: 'patch',
+      url: `http://localhost:8000/api/v1/blog/${dataUpdate?._id}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: formData
+    })
+
+    if (res.data) {
+      message.success('Update Blog success');
+      getDataBlog();
+    } else {
+      message.error('Update Blog Failed')
+    }
+
+    // setIsOpenModalUpdate(false);
+    // console.log('Success:', values);
   };
 
   return (
     <Modal
-      title="Basic Modal"
-      open={isOpenModalUpdate}
-      onOk={() => form.submit()}
+      title="Update Blog"
       centered
       maskClosable={false}
+      open={isOpenModalUpdate}
+      onOk={() => form.submit()}
       onCancel={() => {
+        getDataBlog();
         setIsOpenModalUpdate(false);
       }}
-      width={'40vw'}
+      width={'60vw'}
     >
 
-      {/* Form Update */}
+      {/* Form Update Blog */}
       <Form
         name="Update a blog"
         onFinish={onFinish}
         layout="vertical"
         form={form}
       >
+
+        {/* Title */}
         <Form.Item
           label="Title"
           name="title"
@@ -77,6 +140,8 @@ const ModalUpdateBlog = (props: IProps) => {
         >
           <Input />
         </Form.Item>
+
+        {/* Description */}
         <Form.Item
           label="Description"
           name="description"
@@ -85,6 +150,7 @@ const ModalUpdateBlog = (props: IProps) => {
           <Input />
         </Form.Item>
 
+        {/* Role */}
         <Form.Item
           label="Role"
           name="idRole"
@@ -102,22 +168,116 @@ const ModalUpdateBlog = (props: IProps) => {
           </Select>
         </Form.Item>
 
+        {/* Color */}
         <Form.Item
           label="Color"
           name="color"
           rules={[{ required: true, message: 'Please input your color!' }]}
         >
-          <Input />
+          <ColorPicker showText />
         </Form.Item>
 
+        {/* Thumb */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Form.Item
+            label="Thumb"
+            name="thumb"
+            rules={[{ required: true, message: 'Please input your thumb!' }]}
+            valuePropName="file"
+            getValueFromEvent={normSingleFile}
+          >
+            {/* <Input /> */}
+            <Upload
+              listType="picture-card"
+              multiple={false}
+              maxCount={1}
+              customRequest={customRequest}
+              beforeUpload={beforeUpload}
+            >
+              <button style={{ border: 0, background: 'none' }} type="button">
+                <BiPlus />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </button>
+            </Upload>
+          </Form.Item>
+          <Image
+            src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
+            width={100}
+            height={100}
+          />
+        </div>
+
+        {/* Photo (Array) */}
         <Form.Item
-          label="Thumb"
-          name="thumb"
-          rules={[{ required: true, message: 'Please input your thumb!' }]}
+          label='Photo'
+          name='photo'
+          valuePropName="fileList"
+          getValueFromEvent={normMultipleFile}
         >
-          <Input />
+          <Upload
+            listType="picture-card"
+            multiple={true}
+            maxCount={20}
+            customRequest={customRequest}
+            beforeUpload={beforeUpload}
+          >
+            <button style={{ border: 0, background: 'none' }} type="button">
+              <BiPlus />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </button>
+          </Upload>
         </Form.Item>
 
+        {/* Show previous list photo */}
+        <Form.Item>
+          <Carousel style={{ backgroundColor: '#DEE6ED' }}>
+            {dataUpdate?.photo.map(item => (
+              <div key={item}>
+                <Image
+                  src={`http://localhost:8000/images/${item}`}
+                  width={'100%'}
+                  height={500}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+            ))}
+          </Carousel>
+        </Form.Item>
+
+        {/* Video (Array) */}
+        <Form.Item
+          label='Video'
+        // name='video'
+        >
+          <Form.List
+            name="video"
+          >
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <div
+                    key={key}
+                    style={{ display: 'flex', alignItems: 'baseline', gap: '1.5rem' }}
+                  >
+                    <Form.Item
+                      {...restField}
+                      style={{ flex: 1 }}
+                      name={name}
+                    >
+                      <Input placeholder="Url Video" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </div>
+                ))}
+                <Form.Item>
+                  <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    Add field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
       </Form>
 
     </Modal>

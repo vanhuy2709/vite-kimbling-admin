@@ -184,6 +184,7 @@ const Blog = () => {
         setIsOpenModalUpdate={setIsOpenModalUpdate}
         getDataBlog={getDataBlog}
         dataUpdate={dataUpdate}
+        accessToken={accessToken}
       />
 
       <ModalCreateBlog

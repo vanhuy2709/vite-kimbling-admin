@@ -35,17 +35,17 @@ const ModalCreateBlog = (props: IProps) => {
     getDataRole();
   }, []);
 
+  // Upload multiple file
   const normMultipleFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
-
+  // Upload single file
   const normSingleFile = (e: any) => {
     return e?.file;
   };
-
 
   // Submit Create Blog
   const onFinish = async (values: any) => {
@@ -57,20 +57,14 @@ const ModalCreateBlog = (props: IProps) => {
       color: color.toHexString(),
       thumb: thumb.originFileObj,
       photo: photo.map((item: any) => item.originFileObj),
-      video: video.map((item: any) => item.urlVideo)
+      video: video ? video.map((item: any) => item.urlVideo) : [],
     }
     // Close Modal
     setIsOpenModalCreate(false);
     // Reset Form Antd
     form.resetFields();
 
-    // Check result
-    // console.log(data);
-
-    // Call API post data
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${accessToken}`);
-
+    // Create FormData
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
@@ -86,6 +80,7 @@ const ModalCreateBlog = (props: IProps) => {
       formData.append('video', video)
     })
 
+    // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
       method: 'post',
       url: 'http://localhost:8000/api/v1/blog',
@@ -114,6 +109,7 @@ const ModalCreateBlog = (props: IProps) => {
         form.resetFields();
         setIsOpenModalCreate(false)
       }}
+      width={'60vw'}
     >
 
       {/* Form Create Blog */}
@@ -164,7 +160,6 @@ const ModalCreateBlog = (props: IProps) => {
           name="color"
           rules={[{ required: true, message: 'Please input your color!' }]}
         >
-          {/* <Input /> */}
           <ColorPicker showText />
         </Form.Item>
 
@@ -199,7 +194,6 @@ const ModalCreateBlog = (props: IProps) => {
           valuePropName="fileList"
           getValueFromEvent={normMultipleFile}
         >
-          {/* <Input /> */}
           <Upload
             listType="picture-card"
             multiple={true}

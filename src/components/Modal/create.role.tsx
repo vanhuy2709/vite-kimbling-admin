@@ -1,6 +1,7 @@
 import { Modal, Form, Input, Upload, message } from "antd";
 import { BiPlus } from "react-icons/bi";
-import { sendRequest } from "../../utils/api";
+import { sendRequestFormData } from "../../utils/api";
+import { customRequest, beforeUpload } from "../../utils/upload";
 const { TextArea } = Input;
 
 // Initial interface props
@@ -11,33 +12,40 @@ interface IProps {
   getDataRole: any;
 }
 
-const CreateRoleModal = (props: IProps) => {
+const ModalCreateRole = (props: IProps) => {
 
   // Destructuring props
   const { isOpenModalCreate, setIsOpenModalCreate, accessToken, getDataRole } = props;
   const [form] = Form.useForm();
 
-  // Thumb File
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
+  // Upload thumb single file
+  const normSingleFile = (e: any) => {
+    return e?.file;
   };
 
   // Submit Form
   const onFinish = async (values: any) => {
-    const { nameRole, description } = values;
-    const data = { nameRole, description };
+    const { nameRole, description, thumb } = values;
+    const data = {
+      nameRole,
+      description,
+      thumb: thumb.originFileObj
+    };
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('nameRole', data.nameRole);
+    formData.append('description', data.description);
+    formData.append('thumb', data.thumb);
 
     // Call API create a role
-    const res = await sendRequest<IBackendRes<IRole>>({
+    const res = await sendRequestFormData<IBackendRes<IRole>>({
       method: 'post',
-      url: 'https://kimtuyen.blog/api/v1/roles',
+      url: 'http://localhost:8000/api/v1/roles',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
-      body: data
+      body: formData
     })
 
     if (res.data) {
@@ -92,11 +100,17 @@ const CreateRoleModal = (props: IProps) => {
         <Form.Item
           label="Thumb"
           name="thumb"
-          // rules={[{ required: true, message: 'Please input your thumb!' }]}
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+          rules={[{ required: true, message: 'Please input your thumb!' }]}
+          valuePropName="file"
+          getValueFromEvent={normSingleFile}
         >
-          <Upload listType="picture-card" multiple={false}>
+          <Upload
+            listType="picture-card"
+            multiple={false}
+            maxCount={1}
+            customRequest={customRequest}
+            beforeUpload={beforeUpload}
+          >
             <button style={{ border: 0, background: 'none' }} type="button">
               <BiPlus />
               <div style={{ marginTop: 8 }}>Upload</div>
@@ -109,4 +123,4 @@ const CreateRoleModal = (props: IProps) => {
   )
 }
 
-export default CreateRoleModal
+export default ModalCreateRole

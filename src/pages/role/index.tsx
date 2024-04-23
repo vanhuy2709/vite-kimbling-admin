@@ -6,13 +6,18 @@ import { BiPlus } from 'react-icons/bi';
 import Header from "../../components/Header/Header";
 
 // Import Modal
-import CreateRoleModal from "../../components/Modal/create.role";
+import ModalCreateRole from "../../components/Modal/create.role";
+import ModalUpdateRole from "../../components/Modal/update.role";
 
 const Role = () => {
 
+  // Get Token
   const accessToken = sessionStorage.getItem('user')!;
+
   const [listRole, setListRole] = useState<IRole[]>()!;
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
+  const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState<null | IRole>(null);
   const [meta, setMeta] = useState({
     current: 1,
     pageSize: 10,
@@ -24,7 +29,7 @@ const Role = () => {
   const confirm = async (record: IRole) => {
     const res = await sendRequest<IBackendRes<IRole>>({
       method: 'delete',
-      url: `https://kimtuyen.blog/api/v1/roles/${record._id}`,
+      url: `http://localhost:8000/api/v1/roles/${record._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -63,7 +68,8 @@ const Role = () => {
           <Button
             type="primary"
             onClick={() => {
-              console.log('View: ', record._id)
+              setDataUpdate(record)
+              setIsOpenModalUpdate(true)
             }}
           >
             Detail
@@ -161,11 +167,19 @@ const Role = () => {
         }}
       />
 
-      <CreateRoleModal
+      <ModalCreateRole
         isOpenModalCreate={isOpenModalCreate}
         setIsOpenModalCreate={setIsOpenModalCreate}
         accessToken={accessToken}
         getDataRole={getDataRole}
+      />
+
+      <ModalUpdateRole
+        isOpenModalUpdate={isOpenModalUpdate}
+        setIsOpenModalUpdate={setIsOpenModalUpdate}
+        dataUpdate={dataUpdate}
+        getDataRole={getDataRole}
+        accessToken={accessToken}
       />
     </>
   )

@@ -11,7 +11,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import Blog from './pages/blog';
 import Role from './pages/role';
-import Client from './pages/client';
+import Brand from './pages/brand';
 import LoginPage from './pages/login';
 
 // Router Page
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'client',
-        element: <Client />
+        element: <Brand />
       },
     ]
   },

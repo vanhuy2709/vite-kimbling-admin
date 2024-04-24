@@ -24,7 +24,7 @@ const ModalCreateBlog = (props: IProps) => {
   // Call API Data Role
   const getDataRole = async () => {
     const res = await sendRequest<IBackendRes<IRole>>({
-      method: 'get',
+      method: 'GET',
       url: 'https://kimtuyen.blog/api/v1/roles',
     })
 
@@ -50,7 +50,7 @@ const ModalCreateBlog = (props: IProps) => {
 
   // Submit Create Blog
   const onFinish = async (values: any) => {
-    const { title, description, idRole, color, thumb, photo, video } = values;
+    const { title, description, idRole, color, thumb, photo, video, isFeatured } = values;
     const data = {
       title,
       description,
@@ -59,7 +59,9 @@ const ModalCreateBlog = (props: IProps) => {
       thumb: thumb.originFileObj,
       photo: photo.map((item: any) => item.originFileObj),
       video: video ? video.map((item: any) => item.urlVideo) : [],
+      isFeatured
     }
+
     // Close Modal
     setIsOpenModalCreate(false);
     // Reset Form Antd
@@ -80,10 +82,11 @@ const ModalCreateBlog = (props: IProps) => {
     data.video.forEach((video: any) => {
       formData.append('video', video)
     })
+    formData.append('isFeatured', data.isFeatured);
 
     // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
-      method: 'post',
+      method: 'POST',
       url: 'http://localhost:8000/api/v1/blog',
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -241,6 +244,20 @@ const ModalCreateBlog = (props: IProps) => {
               </>
             )}
           </Form.List>
+        </Form.Item>
+
+        {/* isFeatured */}
+        <Form.Item
+          label="Featured"
+          name="isFeatured"
+          rules={[{ required: true, message: 'Please select one!' }]}
+        >
+          <Select
+            placeholder="Select a option and change input text above"
+          >
+            <Option value={true}>Yes</Option>
+            <Option value={false}>No</Option>
+          </Select>
         </Form.Item>
       </Form>
 

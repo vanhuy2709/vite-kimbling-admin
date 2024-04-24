@@ -4,45 +4,46 @@ export { };
 declare global {
 
   interface IAuth {
-    access_token: string,
+    access_token: string;
     user: {
-      _id: string,
+      _id: string;
       username: string
     }
   }
 
   interface IMeta {
-    current: number | null,
-    pageSize: number | null,
-    pages: number,
-    total: number
+    current: number | null;
+    pageSize: number | null;
+    pages: number;
+    total: number;
   }
 
   interface IBrand {
-    _id: string,
-    title: string,
-    urlImage: string,
+    _id: string;
+    title: string;
+    urlImage: string;
   }
 
   interface IBlog {
-    _id: string,
-    title: string,
-    description: string,
-    idRole: string,
-    color: #D7E1ED,
-    color: string,
-    video: string[],
-    photo: string[],
-    thumb: string,
-    createdAt: string,
-    updatedAt: string,
+    _id: string;
+    title: string;
+    description: string;
+    idRole: string;
+    color: #D7E1ED;
+    color: string;
+    video: string[];
+    photo: string[];
+    thumb: string;
+    createdAt: string;
+    updatedAt: string;
+    isFeatured: boolean;
   }
 
   interface IRole {
-    _id: string,
-    nameRole: string,
-    description: string,
-    thumb: string
+    _id: string;
+    nameRole: string;
+    description: string;
+    thumb: string;
   }
 
   interface IRequest {

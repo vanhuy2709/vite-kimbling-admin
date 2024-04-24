@@ -31,6 +31,7 @@ const ModalUpdateBlog = (props: IProps) => {
         color: dataUpdate.color,
         thumb: dataUpdate.thumb,
         video: dataUpdate.video,
+        isFeatured: dataUpdate.isFeatured
       });
     }
   }, [dataUpdate])
@@ -64,7 +65,7 @@ const ModalUpdateBlog = (props: IProps) => {
 
   // Submit Update Blog
   const onFinish = async (values: any) => {
-    const { title, description, idRole, color, thumb, photo, video } = values;
+    const { title, description, idRole, color, thumb, photo, video, isFeatured } = values;
     const data = {
       title,
       description,
@@ -72,7 +73,8 @@ const ModalUpdateBlog = (props: IProps) => {
       color: color === dataUpdate?.color ? color : color.toHexString(),
       thumb: thumb === dataUpdate?.thumb ? thumb : thumb.originFileObj,
       photo: photo ? photo.map((item: any) => item.originFileObj) : dataUpdate?.photo,
-      video
+      video,
+      isFeatured
     }
 
     // Create Form Data
@@ -88,6 +90,7 @@ const ModalUpdateBlog = (props: IProps) => {
     data.video.forEach((video: any) => {
       formData.append('video', video)
     })
+    formData.append('isFeatured', data.isFeatured);
 
     // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
@@ -202,6 +205,7 @@ const ModalUpdateBlog = (props: IProps) => {
             src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
             width={100}
             height={100}
+            style={{ objectFit: 'contain' }}
           />
         </div>
 
@@ -275,6 +279,21 @@ const ModalUpdateBlog = (props: IProps) => {
               </>
             )}
           </Form.List>
+        </Form.Item>
+
+        {/* isFeatured */}
+        <Form.Item
+          label="Featured"
+          name="isFeatured"
+        // rules={[{ required: true, message: 'Please input your color!' }]}
+        >
+          <Select
+            placeholder="Select a option and change input text above"
+            allowClear
+          >
+            <Option value={true}>Yes</Option>
+            <Option value={false}>No</Option>
+          </Select>
         </Form.Item>
       </Form>
 

@@ -133,6 +133,7 @@ const ModalUpdateRole = (props: IProps) => {
             src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
             width={100}
             height={100}
+            style={{ objectFit: 'contain' }}
           />
         </div>
       </Form>

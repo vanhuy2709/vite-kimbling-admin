@@ -78,7 +78,7 @@ const ModalUpdateRole = (props: IProps) => {
       onCancel={() => {
         setIsOpenModalUpdate(false)
       }}
-      width={'60vw'}
+    // width={'60vw'}
     >
       {/* Form Update Role */}
       <Form

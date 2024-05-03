@@ -74,10 +74,8 @@ const ModalCreateBlog = (props: IProps) => {
     formData.append('idRole', data.idRole);
     formData.append('color', data.color);
     formData.append('thumb', data.thumb);
-    // formData.append('photos', data.photo);
-    // formData.append('video', data.video);
     data.photo.forEach((image: any) => {
-      formData.append('photos', image)
+      formData.append('photo', image)
     })
     data.video.forEach((video: any) => {
       formData.append('video', video)

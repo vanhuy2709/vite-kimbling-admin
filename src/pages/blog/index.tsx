@@ -30,7 +30,7 @@ const Blog = () => {
   const confirm = async (record: IBlog) => {
     const res = await sendRequest<IBackendRes<IBlog>>({
       method: 'delete',
-      url: `http://localhost:8000/api/v1/blog/${record._id}`,
+      url: `https://kimtuyen.blog/api/v1/blog/${record._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -111,7 +111,7 @@ const Blog = () => {
   const getDataBlog = async () => {
     const res = await sendRequest<IBackendRes<IBlog>>({
       method: 'get',
-      url: `http://localhost:8000/api/v1/blog`,
+      url: `https://kimtuyen.blog/api/v1/blog`,
       queryParams: {
         current: meta.current,
         pageSize: meta.pageSize,
@@ -132,7 +132,7 @@ const Blog = () => {
   const handleOnChange = async (page: number, pageSize: number) => {
     const res = await sendRequest<IBackendRes<IBlog>>({
       method: 'get',
-      url: `http://localhost:8000/api/v1/blog`,
+      url: `https://kimtuyen.blog/api/v1/blog`,
       queryParams: {
         current: page,
         pageSize: pageSize,

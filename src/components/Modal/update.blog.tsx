@@ -95,7 +95,7 @@ const ModalUpdateBlog = (props: IProps) => {
     // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
       method: 'PATCH',
-      url: `http://localhost:8000/api/v1/blog/${dataUpdate?._id}`,
+      url: `https://kimtuyen.blog/api/v1/blog/${dataUpdate?._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -202,7 +202,7 @@ const ModalUpdateBlog = (props: IProps) => {
             </Upload>
           </Form.Item>
           <Image
-            src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
+            src={`https://kimtuyen.blog/images/${dataUpdate?.thumb}`}
             width={100}
             height={100}
             style={{ objectFit: 'contain' }}
@@ -236,7 +236,7 @@ const ModalUpdateBlog = (props: IProps) => {
             {dataUpdate?.photo.map(item => (
               <div key={item}>
                 <Image
-                  src={`http://localhost:8000/images/${item}`}
+                  src={`https://kimtuyen.blog/images/${item}`}
                   width={'100%'}
                   height={500}
                   style={{ objectFit: 'contain' }}

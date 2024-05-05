@@ -48,7 +48,7 @@ const ModalUpdateBrand = (props: IProps) => {
     // Call API update data
     const res = await sendRequestFormData<IBackendRes<IBrand>>({
       method: 'PATCH',
-      url: `http://localhost:8000/api/v1/brand/${dataUpdate?._id}`,
+      url: `https://kimtuyen.blog/api/v1/brand/${dataUpdate?._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -115,7 +115,7 @@ const ModalUpdateBrand = (props: IProps) => {
             </Upload>
           </Form.Item>
           <Image
-            src={`http://localhost:8000/images/${dataUpdate?.urlImage}`}
+            src={`https://kimtuyen.blog/images/${dataUpdate?.urlImage}`}
             width={100}
             height={100}
             style={{ objectFit: 'contain' }}

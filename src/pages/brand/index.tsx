@@ -42,7 +42,7 @@ const Brand = () => {
       dataIndex: 'urlImage',
       width: 1000,
       render: (_, record) => (
-        <Image src={`http://localhost:8000/images/${record.urlImage}`} width={100} />
+        <Image src={`https://kimtuyen.blog/images/${record.urlImage}`} width={100} />
       )
 
     },
@@ -81,7 +81,7 @@ const Brand = () => {
   const confirm = async (record: IBrand) => {
     const res = await sendRequest<IBackendRes<IBrand>>({
       method: 'delete',
-      url: `http://localhost:8000/api/v1/brand/${record._id}`,
+      url: `https://kimtuyen.blog/api/v1/brand/${record._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -99,7 +99,7 @@ const Brand = () => {
   const getDataBrand = async () => {
     const res = await sendRequest<IBackendRes<IBrand>>({
       method: 'get',
-      url: 'http://localhost:8000/api/v1/brand',
+      url: 'https://kimtuyen.blog/api/v1/brand',
       queryParams: {
         current: meta.current,
         pageSize: meta.pageSize,
@@ -115,7 +115,7 @@ const Brand = () => {
   const handleOnChange = async (page: number, pageSize: number) => {
     const res = await sendRequest<IBackendRes<IBrand>>({
       method: 'GET',
-      url: `http://localhost:8000/api/v1/brand`,
+      url: `https://kimtuyen.blog/api/v1/brand`,
       queryParams: {
         current: page,
         pageSize: pageSize,

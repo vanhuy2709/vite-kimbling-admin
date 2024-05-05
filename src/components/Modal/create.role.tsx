@@ -42,7 +42,7 @@ const ModalCreateRole = (props: IProps) => {
     // Call API create a role
     const res = await sendRequestFormData<IBackendRes<IRole>>({
       method: 'post',
-      url: 'http://localhost:8000/api/v1/roles',
+      url: 'https://kimtuyen.blog/api/v1/roles',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },

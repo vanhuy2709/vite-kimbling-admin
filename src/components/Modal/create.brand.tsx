@@ -35,7 +35,7 @@ const ModalCreateBrand = (props: IProps) => {
     // Call API post brand
     const res = await sendRequestFormData<IBackendRes<IBrand>>({
       method: 'POST',
-      url: 'http://localhost:8000/api/v1/brand',
+      url: 'https://kimtuyen.blog/api/v1/brand',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },

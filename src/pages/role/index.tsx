@@ -29,7 +29,7 @@ const Role = () => {
   const confirm = async (record: IRole) => {
     const res = await sendRequest<IBackendRes<IRole>>({
       method: 'delete',
-      url: `http://localhost:8000/api/v1/roles/${record._id}`,
+      url: `https://kimtuyen.blog/api/v1/roles/${record._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },

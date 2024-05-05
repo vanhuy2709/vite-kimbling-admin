@@ -51,7 +51,7 @@ const ModalUpdateRole = (props: IProps) => {
     // Call API update data
     const res = await sendRequestFormData<IBackendRes<IRole>>({
       method: 'PATCH',
-      url: `http://localhost:8000/api/v1/roles/${dataUpdate?._id}`,
+      url: `https://kimtuyen.blog/api/v1/roles/${dataUpdate?._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`
       },
@@ -130,7 +130,7 @@ const ModalUpdateRole = (props: IProps) => {
             </Upload>
           </Form.Item>
           <Image
-            src={`http://localhost:8000/images/${dataUpdate?.thumb}`}
+            src={`https://kimtuyen.blog/images/${dataUpdate?.thumb}`}
             width={100}
             height={100}
             style={{ objectFit: 'contain' }}

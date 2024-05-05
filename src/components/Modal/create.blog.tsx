@@ -85,7 +85,7 @@ const ModalCreateBlog = (props: IProps) => {
     // Call API post data
     const res = await sendRequestFormData<IBackendRes<IBlog>>({
       method: 'POST',
-      url: 'http://localhost:8000/api/v1/blog',
+      url: 'https://kimtuyen.blog/api/v1/blog',
       headers: {
         Authorization: `Bearer ${accessToken}`
       },

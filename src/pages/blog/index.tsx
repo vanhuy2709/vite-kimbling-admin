@@ -63,6 +63,13 @@ const Blog = () => {
       dataIndex: 'description',
     },
     {
+      title: 'Featured',
+      dataIndex: 'isFeatured',
+      render: (_value, record) => {
+        return record.isFeatured ? (<Tag color='green'>Featured</Tag>) : (<></>)
+      }
+    },
+    {
       title: 'Color',
       dataIndex: 'color',
       align: 'center',

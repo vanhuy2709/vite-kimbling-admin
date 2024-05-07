@@ -16,6 +16,7 @@ const Blog = () => {
 
   // Initial State
   const [listBlog, setListBlog] = useState<IBlog[]>()!;
+  const [listRole, setListRole] = useState<IRole[]>();
   const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false);
   const [isOpenModalCreate, setIsOpenModalCreate] = useState(false);
   const [dataUpdate, setDataUpdate] = useState<null | IBlog>(null);
@@ -61,6 +62,17 @@ const Blog = () => {
     {
       title: 'Description',
       dataIndex: 'description',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'idRole',
+      render: (value, _record, _index) => {
+        const nameRole = listRole?.find(role => role._id === value);
+
+        if (nameRole) {
+          return <p>{nameRole.nameRole}</p>
+        }
+      },
     },
     {
       title: 'Featured',
@@ -150,9 +162,35 @@ const Blog = () => {
     }
   }
 
-  // Call API get Data
+  // Get Data Role
+  const getDataRole = async () => {
+    const res = await sendRequest<IBackendRes<IRole>>({
+      method: 'GET',
+      url: `https://kimtuyen.blog/api/v1/roles`,
+      // queryParams: {
+      //   current: meta.current,
+      //   pageSize: meta.pageSize,
+      // }
+    })
+
+    if (res.data) {
+      setListRole(res.data?.result);
+      // setMeta({
+      //   current: res.data?.meta.current!,
+      //   pageSize: res.data?.meta.pageSize!,
+      //   pages: res.data?.meta.pages,
+      //   total: res.data?.meta.total,
+      // })
+    }
+  }
+  // Call API get Data Blog
   useEffect(() => {
     getDataBlog();
+  }, [])
+
+  // Call API get Data Role
+  useEffect(() => {
+    getDataRole();
   }, [])
 
   return (

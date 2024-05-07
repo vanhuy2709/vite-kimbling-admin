@@ -26,14 +26,6 @@ const Brand = () => {
 
   const columns: TableProps<IBrand>['columns'] = [
     {
-      title: 'STT',
-      dataIndex: 'stt',
-      align: 'center',
-      render: (_value, _record, index) => (
-        <p>{index + 1}</p>
-      )
-    },
-    {
       title: 'Title',
       dataIndex: 'title',
     },
@@ -108,6 +100,12 @@ const Brand = () => {
 
     if (res.data) {
       setListBrand(res.data.result);
+      setMeta({
+        current: res.data.meta.current!,
+        pageSize: res.data.meta.pageSize!,
+        pages: res.data.meta.pages!,
+        total: res.data.meta.total!,
+      });
     }
   }
 

@@ -105,6 +105,12 @@ const Role = () => {
 
     if (res.data) {
       setListRole(res.data?.result);
+      setMeta({
+        current: res.data.meta.current!,
+        pageSize: res.data.meta.pageSize!,
+        pages: res.data.meta.pages!,
+        total: res.data.meta.total!,
+      })
     }
   }
 
